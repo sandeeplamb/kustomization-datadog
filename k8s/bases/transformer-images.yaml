@@ -1,0 +1,8 @@
+apiVersion: builtin
+kind: ImageTagTransformer
+metadata:
+  name: image-quay-coreos
+imageTag:
+  name: quay.io/coreos/kube-state-metrics
+  newName: my-registry.servers.xyz.com/mirrors/quay.io/coreos/kube-state-metrics
+  newTag: v1.9.5

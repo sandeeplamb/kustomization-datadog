@@ -1,0 +1,11 @@
+---
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: stub
+labels:
+  app.kubernetes.io/name: kube-state-metrics
+  app.kubernetes.io/instance: "datadog"
+fieldSpecs:
+- path: metadata/labels
+  create: true

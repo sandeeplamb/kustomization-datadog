@@ -1,0 +1,42 @@
+---
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: helm-cleaner-kube-state
+target:
+  group: apps
+  version: v1
+  kind: Deployment
+  namespace: monitoring
+  name: datadog-kube-state-metrics
+patch: |-
+  - op: replace
+    path: /spec/template/spec/containers/0/image
+    value: "my-registry.servers.xyz.com/mirrors/quay.io/coreos/kube-state-metrics:v1.9.5"
+  - op: remove
+    path: /spec/template/spec/containers/0/resources/limits/cpu
+  - op: remove
+    path: "/metadata/labels/helm.sh~1chart"
+  - op: remove
+    path: "/metadata/labels/app.kubernetes.io~1managed-by"
+---
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: helm-cleaner-cluster-agent
+target:
+  group: apps
+  version: v1
+  kind: Deployment
+  namespace: monitoring
+  name: datadog-cluster-agent
+patch: |-
+  - op: replace
+    path: /spec/template/spec/containers/0/image
+    value: "my-registry.servers.xyz.com/mirrors/datadog/cluster-agent:1.6.0"
+  - op: remove
+    path: "/metadata/labels/helm.sh~1chart"
+  - op: remove
+    path: "/metadata/labels/app.kubernetes.io~1managed-by"
+  - op: remove
+    path: "/metadata/labels/app.kubernetes.io~1version"

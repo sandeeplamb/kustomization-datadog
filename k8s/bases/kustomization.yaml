@@ -1,0 +1,7 @@
+resources:
+- ./datadog.yaml
+
+transformers:
+- ./transformer-common.yaml
+- ./transformer-patches.yaml
+- ./transformer-images.yaml

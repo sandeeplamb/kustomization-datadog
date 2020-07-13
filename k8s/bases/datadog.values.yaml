@@ -1,0 +1,32 @@
+datadog:
+  apiKey: ""
+  apiKeyExistingSecret: ""
+  appKey: ""
+  appKeyExistingSecret: ""
+  clusterName: "eks-dev-cluster-1"
+  logLevel: INFO
+  kubeStateMetricsEnabled: true
+  tags:
+    - "region: eu-east-1"
+    - "customer: xyz"
+  apm:
+    enabled: false
+
+clusterAgent:
+  enabled: true
+
+agents:
+  enabled: true
+
+kube-state-metrics:
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

@@ -1,0 +1,67 @@
+resources:
+- ../../bases
+
+# patchesStrategicMerge:
+# - ./patches/patch.yaml
+
+transformers:
+- ./transformer-common.yaml
+
+secretGenerator:
+- behavior: merge
+  name: datadog-cluster-agent
+  envs:
+  - ./secrets/datadog-cluster-agent.env
+  type: Opaque
+- behavior: merge
+  name: datadog
+  envs:
+  - ./secrets/datadog.env
+  type: Opaque
+
+patches:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    namespace: monitoring
+    name: datadog-cluster-agent
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: "datadog/cluster-agent:1.4.0"
+    - op: replace
+      path: /spec/template/spec/containers/0/livenessProbe/initialDelaySeconds
+      value: 10
+    - op: replace
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 20
+
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    namespace: monitoring
+    name: datadog-kube-state-metrics
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: "quay.io/coreos/kube-state-metrics:v1.9.0"
+    - op: replace
+      path: /spec/template/spec/containers/0/livenessProbe/initialDelaySeconds
+      value: 10
+    - op: replace
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 20
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+      value: 1800m
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: 2Gi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 800m
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/memory
+      value: 700Mi
